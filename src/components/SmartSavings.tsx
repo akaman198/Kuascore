@@ -1,16 +1,23 @@
 'use client';
 import React, { useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
 
 export default function SmartSavings() {
-  const [savedAmount, setSavedAmount] = useState(120);
   const [hasSavedToday, setHasSavedToday] = useState(false);
+  const { user, saveMoney } = useAppContext();
+
+  if (!user) return null;
 
   const handleSave = () => {
-    setSavedAmount(prev => prev + 15);
-    setHasSavedToday(true);
+    if (user.balance >= 15) {
+      saveMoney(15);
+      setHasSavedToday(true);
+    } else {
+      alert("Insufficient funds to save K15 today.");
+    }
   };
 
-  const progressPercentage = (savedAmount / 500) * 100;
+  const progressPercentage = (user.savings / user.savingsGoal) * 100;
 
   return (
     <div className="glass-card animate-fade-in delay-200">
@@ -42,10 +49,10 @@ export default function SmartSavings() {
       <div>
         <div className="flex justify-between items-center" style={{ marginBottom: '8px' }}>
           <span style={{ fontSize: '0.9rem' }}>Goal: Restock Inventory</span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--primary)' }}>K{savedAmount} / K500</span>
+          <span style={{ fontSize: '0.9rem', color: 'var(--primary)' }}>K{user.savings} / K{user.savingsGoal}</span>
         </div>
         <div style={{ width: '100%', height: '8px', background: 'var(--surface-light)', borderRadius: '4px', overflow: 'hidden' }}>
-          <div style={{ width: `${progressPercentage}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary), var(--accent))', borderRadius: '4px', transition: 'width 0.5s ease' }}></div>
+          <div style={{ width: `${Math.min(100, progressPercentage)}%`, height: '100%', background: 'linear-gradient(90deg, var(--primary), var(--accent))', borderRadius: '4px', transition: 'width 0.5s ease' }}></div>
         </div>
       </div>
     </div>

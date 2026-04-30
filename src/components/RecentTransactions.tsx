@@ -1,14 +1,12 @@
 'use client';
 import React from 'react';
-
-const transactions = [
-  { id: 1, name: 'Mobile Money Transfer', amount: '+K45.00', date: 'Today, 2:30 PM', type: 'in' },
-  { id: 2, name: 'Market Restock', amount: '-K120.00', date: 'Today, 9:15 AM', type: 'out' },
-  { id: 3, name: 'Smart Savings Auto-Deposit', amount: '-K15.00', date: 'Yesterday', type: 'out' },
-  { id: 4, name: 'Customer Payment', amount: '+K85.00', date: 'Yesterday', type: 'in' },
-];
+import { useAppContext } from '@/context/AppContext';
 
 export default function RecentTransactions() {
+  const { user } = useAppContext();
+
+  if (!user) return null;
+
   return (
     <div className="glass-card animate-fade-in delay-300">
       <div className="flex justify-between items-center" style={{ marginBottom: '20px' }}>
@@ -17,7 +15,7 @@ export default function RecentTransactions() {
       </div>
 
       <div className="flex flex-col">
-        {transactions.map(tx => (
+        {user.transactions.slice(0, 4).map(tx => (
           <div key={tx.id} className="transaction-item">
             <div className="flex items-center gap-4">
               <div style={{ 
@@ -38,10 +36,13 @@ export default function RecentTransactions() {
               </div>
             </div>
             <div style={{ fontWeight: '600', color: tx.type === 'in' ? 'var(--success)' : 'var(--text-main)' }}>
-              {tx.amount}
+              {tx.type === 'in' ? '+' : '-'}K{tx.amount.toFixed(2)}
             </div>
           </div>
         ))}
+        {user.transactions.length === 0 && (
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', padding: '10px 0' }}>No recent activity.</p>
+        )}
       </div>
     </div>
   );

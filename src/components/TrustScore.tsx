@@ -1,11 +1,21 @@
 'use client';
 import React, { useState } from 'react';
+import { useAppContext } from '@/context/AppContext';
 
 export default function TrustScore() {
   const [unlocked, setUnlocked] = useState(false);
-  const score = 785;
+  const { user, unlockOffers } = useAppContext();
+
+  if (!user) return null;
+
+  const score = user.score;
   const maxScore = 1000;
   const percentage = (score / maxScore) * 100;
+
+  const handleUnlock = () => {
+    unlockOffers();
+    setUnlocked(true);
+  };
 
   return (
     <div className="glass-card animate-fade-in delay-100">
@@ -25,7 +35,7 @@ export default function TrustScore() {
         <div className="flex flex-col gap-2">
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>
             {unlocked 
-              ? "Offers unlocked! We have sent a K500 micro-loan offer to your inbox."
+              ? "Offers unlocked! We have disbursed a K500 micro-loan to your balance."
               : "Your transaction consistency has improved! You are now eligible for micro-loans up to K500."}
           </p>
           {!unlocked && (
@@ -33,7 +43,7 @@ export default function TrustScore() {
               <button 
                 className="btn" 
                 style={{ padding: '8px 16px', fontSize: '0.9rem' }}
-                onClick={() => setUnlocked(true)}
+                onClick={handleUnlock}
               >
                 Unlock Offers
               </button>

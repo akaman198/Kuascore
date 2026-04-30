@@ -1,4 +1,5 @@
 import './globals.css';
+import { AppProvider } from '@/context/AppContext';
 
 export const metadata = {
   title: 'KuaScore - Turn everyday transactions into opportunity',
@@ -12,7 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <AppProvider>
+          {children}
+        </AppProvider>
+      </body>
     </html>
   );
 }
