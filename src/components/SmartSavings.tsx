@@ -4,16 +4,22 @@ import { useAppContext } from '@/context/AppContext';
 
 export default function SmartSavings() {
   const [hasSavedToday, setHasSavedToday] = useState(false);
+  const [saveAmount, setSaveAmount] = useState<number | string>(15);
   const { user, saveMoney } = useAppContext();
 
   if (!user) return null;
 
   const handleSave = () => {
-    if (user.balance >= 15) {
-      saveMoney(15);
+    const amount = Number(saveAmount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid amount.');
+      return;
+    }
+    if (user.balance >= amount) {
+      saveMoney(amount);
       setHasSavedToday(true);
     } else {
-      alert("Insufficient funds to save K15 today.");
+      alert(`Insufficient funds to save K${amount} today.`);
     }
   };
 
@@ -31,17 +37,37 @@ export default function SmartSavings() {
           {hasSavedToday ? "You've successfully saved for today!" : "Suggested safe daily saving:"}
         </p>
         <div className="flex items-center gap-4">
-          <h2 className="text-gradient" style={{ fontSize: '2rem', margin: 0 }}>
-            {hasSavedToday ? "✓" : "K15.00"}
-          </h2>
-          {!hasSavedToday && (
-            <button 
-              className="btn btn-secondary" 
-              style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
-              onClick={handleSave}
-            >
-              Save Now
-            </button>
+          {hasSavedToday ? (
+            <h2 className="text-gradient" style={{ fontSize: '2rem', margin: 0 }}>✓</h2>
+          ) : (
+            <>
+              <div style={{ position: 'relative' }}>
+                <span style={{ position: 'absolute', left: '0', top: '50%', transform: 'translateY(-50%)', color: 'var(--primary)', fontSize: '1.5rem', fontWeight: 'bold' }}>K</span>
+                <input 
+                  type="number" 
+                  value={saveAmount}
+                  onChange={(e) => setSaveAmount(e.target.value)}
+                  style={{ 
+                    background: 'transparent', 
+                    border: 'none', 
+                    borderBottom: '2px solid rgba(79, 172, 254, 0.5)', 
+                    color: 'white', 
+                    fontSize: '2rem', 
+                    fontWeight: 'bold', 
+                    width: '100px', 
+                    paddingLeft: '25px',
+                    outline: 'none'
+                  }}
+                />
+              </div>
+              <button 
+                className="btn btn-secondary" 
+                style={{ padding: '6px 12px', fontSize: '0.8rem', borderRadius: '8px' }}
+                onClick={handleSave}
+              >
+                Save Now
+              </button>
+            </>
           )}
         </div>
       </div>
