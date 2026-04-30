@@ -41,8 +41,10 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const storedUser = localStorage.getItem('kuascore_user');
     if (storedUser) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUser(JSON.parse(storedUser));
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsLoaded(true);
   }, []);
 

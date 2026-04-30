@@ -12,7 +12,7 @@ export default function Nudges() {
         </div>
         <div>
           <h4 style={{ fontSize: '1rem', marginBottom: '4px' }}>Income Consistency</h4>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>You've received payments for 5 consecutive days. This boosted your score by 10 points!</p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>You&apos;ve received payments for 5 consecutive days. This boosted your score by 10 points!</p>
         </div>
       </div>
 
